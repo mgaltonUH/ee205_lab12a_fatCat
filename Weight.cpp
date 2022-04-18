@@ -8,7 +8,6 @@
 /// @author Mariko Galton <mgalton@hawaii.edu>
 /// @date   12_Apr_2022
 ///////////////////////////////////////////////////////////////////////////////
-#include <cassert>
 #include <iostream>
 #include <stdexcept>
 #include <iomanip>
@@ -115,7 +114,7 @@ bool Weight::isWeightValid (float checkWeight) const noexcept {
             return true;
         }
         else {
-            cout << "Error: The inputted " << checkWeight << "cannot be greater than " <<maxWeight << endl;
+            cout << "Error: The inputted " << checkWeight << "cannot be greater than " << maxWeight << endl;
         }
     }
     return true;
@@ -196,10 +195,6 @@ void Weight::dump() const noexcept {
         FORMAT_LINE( "Weight", "isKnown" )        << bIsKnown << endl ;
         FORMAT_LINE( "Weight", "weight" )         <<  getWeight() << endl;
         FORMAT_LINE( "Weight", "unitOfWeight" )   << unitOfWeight << endl;
-        FORMAT_LINE( "Weight", "hasMax" )         << bHasMax<< endl;
+        FORMAT_LINE( "Weight", "hasMax" )         << bHasMax << endl;
         FORMAT_LINE( "Weight", "maxWeight" )      << getMaxWeight() << endl;
     }
-
-
-
-
