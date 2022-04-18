@@ -22,7 +22,7 @@ public:
 private:
     bool  bIsKnown = false;
     bool  bHasMax = false;
-    enum UnitOfWeight unitOfWeight = Pound;
+    enum UnitOfWeight unitOfWeight = POUND;
     float weight{};
     float maxWeight{};
 

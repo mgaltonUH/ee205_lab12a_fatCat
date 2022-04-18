@@ -21,8 +21,6 @@ const float Weight::KILOS_IN_A_POUND = 0.453592 ;
 const float Weight::SLUGS_IN_A_POUND = 0.031081 ;
 
 
-
-
 //Kilo, Slug, and Pound conversion (static members)
 float Weight::fromKilogramToPound( const float kilogram ) noexcept {
     return kilogram / KILOS_IN_A_POUND;
@@ -54,10 +52,50 @@ float Weight::convertWeight (float fromWeight, UnitOfWeight fromUnit, UnitOfWeig
         case SLUG          : return fromPoundToSlug(fromWeight);
             break;
     }
+    return true;
+}
+
+//Public Member Functions
+Weight::Weight() noexcept {
+}
+
+Weight::Weight(float newWeight) {
+    setWeight(newWeight);
+}
+Weight::Weight(UnitOfWeight newUnitOfWeight) noexcept {
+    unitOfWeight = newUnitOfWeight; // since enum UnitOfWeight unitOfWeight, so unitOfWeight is equal to the newUnitOfWeight
+}
+Weight::Weight(float newWeight, UnitOfWeight newUnitOfWeight) {
+    setWeight(newWeight,newUnitOfWeight);
+}
+Weight::Weight(float newWeight, float newMaxWeight) {
+    setWeight(newWeight);
+    setMaxWeight(newMaxWeight);
+}
+Weight::Weight (UnitOfWeight newUnitOfWeight, float newMaxWeight) {
+    setMaxWeight(newMaxWeight);
+    unitOfWeight = newUnitOfWeight;
+}
+Weight::Weight (float newWeight, UnitOfWeight newUnitOfWeight, float newMaxWeight){
+    setWeight(newWeight);
+    unitOfWeight = newUnitOfWeight;
+    setMaxWeight(newMaxWeight);
+}
+
+void Weight::setMaxWeight(float newMaxWeight){
+    if(bHasMax == false){
+        if(isWeightValid(newMaxWeight) == false ){
+            exit(0);
+        }
+        else {
+            bHasMax = true;
+            maxWeight = newMaxWeight;
+        }
+    }
 }
 
 bool Weight::isWeightKnown() const noexcept {
-    if(weight == true){
+    if(bIsKnown == true){
         return true;
     }
     else {
@@ -70,7 +108,7 @@ bool Weight::isWeightValid (float checkWeight) const noexcept {
         return true;
     }
     else {
-        cout << checkWeight << " cannot be less that zero" << endl;
+        cout << "Input weight [ " << checkWeight << " ] cannot be less that zero" << endl;
     }
     if(bHasMax == true) {
         if(checkWeight <= maxWeight){
@@ -80,6 +118,7 @@ bool Weight::isWeightValid (float checkWeight) const noexcept {
             cout << "Error: The inputted " << checkWeight << "cannot be greater than " <<maxWeight << endl;
         }
     }
+    return true;
 }
 
 bool Weight::validate() const noexcept {
@@ -108,7 +147,7 @@ bool Weight::hasMaxWeight() const noexcept {
 
 float Weight::getWeight() const noexcept{
     if(bIsKnown == false){
-        return UNKNOWN_WEIGHT;
+        return  UNKNOWN_WEIGHT;
     }
     else {
         return weight;
@@ -127,6 +166,7 @@ float Weight::getMaxWeight() const noexcept {
 void Weight::setWeight (float newWeight) {
     if(isWeightValid(newWeight) == true){
         weight = newWeight;
+        bIsKnown = true;
     }
 }
 
@@ -134,26 +174,32 @@ void Weight::setWeight (float newWeight, UnitOfWeight weightUnits) {
     setWeight(convertWeight(newWeight, weightUnits,unitOfWeight));
 }
 
+std::ostream& operator<<( ostream& lhs_stream,const UnitOfWeight rhs_UnitOfWeight ) {
+    switch( rhs_UnitOfWeight ) {
+        case POUND: return lhs_stream << POUND_LABEL ;
+        case KILO:  return lhs_stream << KILO_LABEL ;
+        case SLUG:  return lhs_stream << SLUG_LABEL ;
+        default:
+            throw out_of_range( "The unit can’t be mapped to a string" );
+    }
+}
+
+#define FORMAT_LINE( className, member ) cout << setw(8) << (className) << setw(20) << (member) << setw(52)
+
 void Weight::dump() const noexcept {
+    //assert(validate());
+        cout << setw(80) << setfill( '=' ) << "" << endl ;
+        cout << setfill( ' ' ) ;
+        cout << left ;
+        cout << boolalpha ;
+        FORMAT_LINE( "Weight", "this" )           << &weight << endl;
+        FORMAT_LINE( "Weight", "isKnown" )        << bIsKnown << endl ;
+        FORMAT_LINE( "Weight", "weight" )         <<  getWeight() << endl;
+        FORMAT_LINE( "Weight", "unitOfWeight" )   << unitOfWeight << endl;
+        FORMAT_LINE( "Weight", "hasMax" )         << bHasMax<< endl;
+        FORMAT_LINE( "Weight", "maxWeight" )      << getMaxWeight() << endl;
+    }
 
-}
-
-//Public Member Functions
-Weight::Weight() noexcept {
-}
-
-Weight::Weight(float newWeight) {
-    setWeight(newWeight);
-}
-Weight::Weight(UnitOfWeight newUnitOfWeight) noexcept {
-    unitOfWeight = newUnitOfWeight; // since enum UnitOfWeight unitOfWeight, so unitOfWeight is equal to the newUnitOfWeight
-}
-Weight::Weight(float newWeight, UnitOfWeight newUnitOfWeight) {
-    setWeight(newWeight,newUnitOfWeight);
-}
-Weight::Weight(float newWeight, float newMaxWeight) {
-    
-}
 
 
 
