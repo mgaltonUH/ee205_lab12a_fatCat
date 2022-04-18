@@ -134,7 +134,6 @@ bool Weight::validate() const noexcept {
     return false;
 }
 
-
 bool Weight::hasMaxWeight() const noexcept {
     if(bHasMax == true){
         return true;
